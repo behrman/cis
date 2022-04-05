@@ -1,4 +1,4 @@
-Causal Inference in Statistics - dagitty solutions
+Causal Inference in Statistics - dagitty Solutions
 ================
 
 This repository contains [solutions](solutions_dagitty.md) using the

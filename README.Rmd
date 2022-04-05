@@ -1,5 +1,5 @@
 ---
-title: "Causal Inference in Statistics - dagitty solutions"
+title: "Causal Inference in Statistics - dagitty Solutions"
 output: 
   github_document:
     toc: true
