@@ -464,35 +464,39 @@ Consider the graph in Figure 3.8:
 
 (a)&nbsp;List all of the sets of variables that satisfy the backdoor criterion to determine the causal effect of X on Y.
 
-`dagitty` does not have a function to calculate sets of variables that satisfy the backdoor criterion. We can use `dagitty::adjustmentSets()` to find adjustment sets and then remove any sets that contain descendants of X.
+`dagitty` does not have a function to calculate sets of variables that satisfy the backdoor criterion. We can use `dagitty::adjustmentSets()` to find adjustment sets and then remove any sets that contain descendants of the exposure.
 
 ```{r}
-adjustmentSets(fig_3.8, exposure = "X", outcome = "Y", type = "all")
+backdoor_sets <- function(graph, exposure, outcome, type) {
+  exposure_descendants <- 
+    descendants(graph, exposure) %>% 
+    setdiff(exposure)
+  adjustmentSets(graph, exposure = exposure, outcome = outcome, type = type) %>% 
+    keep(~ is_empty(intersect(., exposure_descendants)))
+}
 ```
 
-These adjustment sets contain no descendants of X, hence they all satisfy the backdoor criterion.
+```{r}
+backdoor_sets(fig_3.8, exposure = "X", outcome = "Y", type = "all")
+```
 
 (b)&nbsp;List all of the minimal sets of variables that satisfy the backdoor criterion to determine the causal effect of X on Y (i.e., any set of variables such that, if you removed any one of the variables from the set, it would no longer meet the criterion).
 
 ```{r}
-adjustmentSets(fig_3.8, exposure = "X", outcome = "Y", type = "minimal")
+backdoor_sets(fig_3.8, exposure = "X", outcome = "Y", type = "minimal")
 ```
 
 (c)&nbsp;List all minimal sets of variables that need be measured in order to identify the effect of D on Y.
 
 ```{r}
-adjustmentSets(fig_3.8, exposure = "D", outcome = "Y", type = "minimal")
+backdoor_sets(fig_3.8, exposure = "D", outcome = "Y", type = "minimal")
 ```
-
-These adjustment sets contain no descendants of D, hence they all satisfy the backdoor criterion.
 
 Repeat, for the effect of {D, W} on Y.
 
 ```{r}
-adjustmentSets(fig_3.8, exposure = c("D", "W"), outcome = "Y", type = "minimal")
+backdoor_sets(fig_3.8, exposure = c("D", "W"), outcome = "Y", type = "minimal")
 ```
-
-These adjustment sets contain no descendants of {D, W}, hence they all satisfy the backdoor criterion.
 
 ### 3.5 Conditional Interventions and Covariate-Specific Effects
 
@@ -502,34 +506,24 @@ Consider the causal model of Figure 3.8.
 
 (a)&nbsp;Find an expression for the c-specific effect of X on Y.
 
-First, require that C be an adjustment node.
-
 ```{r}
 adjustedNodes(fig_3.8) <- "C"
-```
 
-Then, find the minimal adjustment sets.
-
-```{r}
-adjustmentSets(fig_3.8, exposure = "X", outcome = "Y", type = "minimal")
+backdoor_sets(fig_3.8, exposure = "X", outcome = "Y", type = "minimal")
 
 adjustedNodes(fig_3.8) <- list()
 ```
-
-This adjustment set contains no descendants of X and thus satisfies the backdoor criterion to assess the c-specific effect of X on Y.
 
 (b)&nbsp;Identify a set of four variables that need to be measured in order to estimate the z-specific effect of X on Y.
 
 ```{r}
 adjustedNodes(fig_3.8) <- "Z"
 
-adjustmentSets(fig_3.8, exposure = "X", outcome = "Y", type = "all") %>% 
+backdoor_sets(fig_3.8, exposure = "X", outcome = "Y", type = "all") %>% 
   keep(~ length(.) == 4)
 
 adjustedNodes(fig_3.8) <- list()
 ```
-
-These adjustment sets contain no descendants of X and thus satisfy the backdoor criterion to assess the z-specific effect of X on Y.
 
 ### 3.8 Causal Inference in Linear Systems
 
