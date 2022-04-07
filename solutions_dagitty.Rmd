@@ -35,8 +35,16 @@ knitr::opts_chunk$set(
 # Packages
 library(tidyverse)
 library(dagitty)
+```
 
-sessioninfo::package_info("dagitty", dependencies = FALSE)
+```{r echo=FALSE}
+v <- sessioninfo::package_info("dagitty", dependencies = FALSE)
+```
+
+The code below used version `r v$loadedversion` of dagitty. If the CRAN version is less than this version, the current development version can be installed with:
+
+```{r eval=FALSE}
+remotes::install_github("jtextor/dagitty/r")
 ```
 
 ## 1 Preliminaries: Statistical and Causal Models
@@ -78,8 +86,7 @@ parents(fig_1.8, "Z")
 (b)&nbsp;Name all the ancestors of Z.
 
 ```{r}
-ancestors(fig_1.8, "Z") %>% 
-  setdiff("Z")
+ancestors(fig_1.8, "Z", proper = TRUE)
 ```
 
 (c)&nbsp;Name all the children of W.
@@ -91,8 +98,7 @@ children(fig_1.8, "W")
 (d)&nbsp;Name all the descendants of W.
 
 ```{r}
-descendants(fig_1.8, "W") %>% 
-  setdiff("W")
+descendants(fig_1.8, "W", proper = TRUE)
 ```
 
 (e)&nbsp;Draw all (simple) paths between X and T (i.e., no node should appear more than once).
@@ -464,15 +470,12 @@ Consider the graph in Figure 3.8:
 
 (a)&nbsp;List all of the sets of variables that satisfy the backdoor criterion to determine the causal effect of X on Y.
 
-`dagitty` does not have a function to calculate sets of variables that satisfy the backdoor criterion. We can use `dagitty::adjustmentSets()` to find adjustment sets and then remove any sets that contain descendants of the exposure.
+dagitty does not have a function to calculate sets of variables that satisfy the backdoor criterion. We can use `dagitty::adjustmentSets()` to find adjustment sets and then remove any sets that contain descendants of the exposure.
 
 ```{r}
 backdoor_sets <- function(graph, exposure, outcome, type) {
-  exposure_descendants <- 
-    descendants(graph, exposure) %>% 
-    setdiff(exposure)
   adjustmentSets(graph, exposure = exposure, outcome = outcome, type = type) %>% 
-    keep(~ is_empty(intersect(., exposure_descendants)))
+    keep(~ is_empty(intersect(., descendants(graph, exposure, proper = TRUE))))
 }
 ```
 

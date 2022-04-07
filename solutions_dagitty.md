@@ -41,14 +41,15 @@ each chapter.
 # Packages
 library(tidyverse)
 library(dagitty)
-
-sessioninfo::package_info("dagitty", dependencies = FALSE)
 ```
 
-    #>  package * version date (UTC) lib source
-    #>  dagitty * 0.3-2   2022-04-06 [1] Github (jtextor/dagitty@b31c919)
-    #> 
-    #>  [1] /Library/Frameworks/R.framework/Versions/4.1/Resources/library
+The code below used version 0.3-2 of dagitty. If the CRAN version is
+less than this version, the current development version can be installed
+with:
+
+``` r
+remotes::install_github("jtextor/dagitty/r")
+```
 
 ## 1 Preliminaries: Statistical and Causal Models
 
@@ -76,7 +77,7 @@ fig_1.8 <-
 plot(fig_1.8)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 #### Study question 1.4.1
 
@@ -93,8 +94,7 @@ parents(fig_1.8, "Z")
 (b) Name all the ancestors of Z.
 
 ``` r
-ancestors(fig_1.8, "Z") %>% 
-  setdiff("Z")
+ancestors(fig_1.8, "Z", proper = TRUE)
 ```
 
     #> [1] "Y" "X" "W"
@@ -110,8 +110,7 @@ children(fig_1.8, "W")
 (d) Name all the descendants of W.
 
 ``` r
-descendants(fig_1.8, "W") %>% 
-  setdiff("W")
+descendants(fig_1.8, "W", proper = TRUE)
 ```
 
     #> [1] "Z" "T" "Y"
@@ -173,7 +172,7 @@ graph <-
 plot(graph)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ## 2 Graphical Models and Their Applications
 
@@ -201,7 +200,7 @@ fig_2.5 <-
 plot(fig_2.5)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 Figure 2.6. A directed graph in which P is a descendant of a collider.
 
@@ -226,7 +225,7 @@ fig_2.6 <-
 plot(fig_2.6)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 #### Study question 2.3.1
 
@@ -413,7 +412,7 @@ fig_2.9 <-
 plot(fig_2.9)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 #### Study question 2.4.1
 
@@ -548,7 +547,7 @@ equivalenceClass(fig_2.9) %>%
   plot()
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
 
 Since all of the edges are directed in the CPDAG, none of them can be
 reversed.
@@ -678,7 +677,7 @@ fig_3.8 <-
 plot(fig_3.8)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
 
 #### Study question 3.3.1
 
@@ -687,18 +686,15 @@ Consider the graph in Figure 3.8:
 (a) List all of the sets of variables that satisfy the backdoor
 criterion to determine the causal effect of X on Y.
 
-`dagitty` does not have a function to calculate sets of variables that
+dagitty does not have a function to calculate sets of variables that
 satisfy the backdoor criterion. We can use `dagitty::adjustmentSets()`
 to find adjustment sets and then remove any sets that contain
 descendants of the exposure.
 
 ``` r
 backdoor_sets <- function(graph, exposure, outcome, type) {
-  exposure_descendants <- 
-    descendants(graph, exposure) %>% 
-    setdiff(exposure)
   adjustmentSets(graph, exposure = exposure, outcome = outcome, type = type) %>% 
-    keep(~ is_empty(intersect(., exposure_descendants)))
+    keep(~ is_empty(intersect(., descendants(graph, exposure, proper = TRUE))))
 }
 ```
 
@@ -827,7 +823,7 @@ fig_3.18 <-
 plot(fig_3.18)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-41-1.png)<!-- -->
 
 #### Study question 3.8.1
 
