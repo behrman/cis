@@ -41,7 +41,7 @@ library(dagitty)
 v <- sessioninfo::package_info("dagitty", dependencies = FALSE)
 ```
 
-The code below used version `r v$loadedversion` of dagitty. If the CRAN version is less than this version, the current development version can be installed with:
+The code below used dagitty version `r v$loadedversion`. If the CRAN version is less than this version, the current development version can be installed with:
 
 ```{r eval=FALSE}
 remotes::install_github("jtextor/dagitty/r")

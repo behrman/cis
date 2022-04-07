@@ -43,8 +43,8 @@ library(tidyverse)
 library(dagitty)
 ```
 
-The code below used version 0.3-2 of dagitty. If the CRAN version is
-less than this version, the current development version can be installed
+The code below used dagitty version 0.3-2. If the CRAN version is less
+than this version, the current development version can be installed
 with:
 
 ``` r
