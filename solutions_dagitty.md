@@ -44,8 +44,7 @@ library(dagitty)
 ```
 
 The code below used dagitty version 0.3-2. If the CRAN version is less
-than this version, the current development version can be installed
-with:
+than this version, you can install the current development version with:
 
 ``` r
 remotes::install_github("jtextor/dagitty/r")
@@ -77,7 +76,7 @@ fig_1.8 <-
 plot(fig_1.8)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 #### Study question 1.4.1
 
@@ -172,7 +171,7 @@ graph <-
 plot(graph)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ## 2 Graphical Models and Their Applications
 
@@ -200,7 +199,7 @@ fig_2.5 <-
 plot(fig_2.5)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 Figure 2.6. A directed graph in which P is a descendant of a collider.
 
@@ -225,7 +224,7 @@ fig_2.6 <-
 plot(fig_2.6)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 #### Study question 2.3.1
 
@@ -412,7 +411,7 @@ fig_2.9 <-
 plot(fig_2.9)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
 
 #### Study question 2.4.1
 
@@ -547,7 +546,7 @@ equivalenceClass(fig_2.9) %>%
   plot()
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
 
 Since all of the edges are directed in the CPDAG, none of them can be
 reversed.
@@ -677,7 +676,7 @@ fig_3.8 <-
 plot(fig_3.8)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
 
 #### Study question 3.3.1
 
@@ -823,7 +822,7 @@ fig_3.18 <-
 plot(fig_3.18)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-41-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
 
 #### Study question 3.8.1
 

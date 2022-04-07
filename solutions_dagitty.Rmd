@@ -37,11 +37,7 @@ library(tidyverse)
 library(dagitty)
 ```
 
-```{r echo=FALSE}
-v <- sessioninfo::package_info("dagitty", dependencies = FALSE)
-```
-
-The code below used dagitty version `r v$loadedversion`. If the CRAN version is less than this version, the current development version can be installed with:
+The code below used dagitty version `r sessioninfo::package_info("dagitty", dependencies = FALSE)$loadedversion`. If the CRAN version is less than this version, you can install the current development version with:
 
 ```{r eval=FALSE}
 remotes::install_github("jtextor/dagitty/r")
