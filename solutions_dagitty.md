@@ -1,31 +1,51 @@
 Causal Inference in Statistics: A Primer
 ================
 Bill Behrman
-2022-04-06
+2023-04-17
 
--   [1 Preliminaries: Statistical and Causal
-    Models](#1-preliminaries-statistical-and-causal-models)
-    -   [1.4 Graphs](#14-graphs)
-        -   [Study question 1.4.1](#study-question-141)
-        -   [Study question 1.5.1](#study-question-151)
--   [2 Graphical Models and Their
-    Applications](#2-graphical-models-and-their-applications)
-    -   [2.3 Colliders](#23-colliders)
-        -   [Study question 2.3.1](#study-question-231)
-    -   [2.4 d-separation](#24-d-separation)
-        -   [Study question 2.4.1](#study-question-241)
-    -   [2.5 Model Testing and Causal
-        Search](#25-model-testing-and-causal-search)
-        -   [Study question 2.5.1](#study-question-251)
--   [3 The Effects of Interventions](#3-the-effects-of-interventions)
-    -   [3.3 The Backdoor Criterion](#33-the-backdoor-criterion)
-        -   [Study question 3.3.1](#study-question-331)
-    -   [3.5 Conditional Interventions and Covariate-Specific
-        Effects](#35-conditional-interventions-and-covariate-specific-effects)
-        -   [Study question 3.5.1](#study-question-351)
-    -   [3.8 Causal Inference in Linear
-        Systems](#38-causal-inference-in-linear-systems)
-        -   [Study question 3.8.1](#study-question-381)
+- <a href="#1-preliminaries-statistical-and-causal-models"
+  id="toc-1-preliminaries-statistical-and-causal-models">1 Preliminaries:
+  Statistical and Causal Models</a>
+  - <a href="#14-graphs" id="toc-14-graphs">1.4 Graphs</a>
+    - <a href="#study-question-141" id="toc-study-question-141">Study question
+      1.4.1</a>
+    - <a href="#study-question-151" id="toc-study-question-151">Study question
+      1.5.1</a>
+- <a href="#2-graphical-models-and-their-applications"
+  id="toc-2-graphical-models-and-their-applications">2 Graphical Models
+  and Their Applications</a>
+  - <a href="#23-colliders" id="toc-23-colliders">2.3 Colliders</a>
+    - <a href="#study-question-231" id="toc-study-question-231">Study question
+      2.3.1</a>
+  - <a href="#24-d-separation" id="toc-24-d-separation">2.4 d-separation</a>
+    - <a href="#study-question-241" id="toc-study-question-241">Study question
+      2.4.1</a>
+  - <a href="#25-model-testing-and-causal-search"
+    id="toc-25-model-testing-and-causal-search">2.5 Model Testing and Causal
+    Search</a>
+    - <a href="#study-question-251" id="toc-study-question-251">Study question
+      2.5.1</a>
+- <a href="#3-the-effects-of-interventions"
+  id="toc-3-the-effects-of-interventions">3 The Effects of
+  Interventions</a>
+  - <a href="#33-the-backdoor-criterion"
+    id="toc-33-the-backdoor-criterion">3.3 The Backdoor Criterion</a>
+    - <a href="#study-question-331" id="toc-study-question-331">Study question
+      3.3.1</a>
+  - <a href="#34-the-front-door-criterion"
+    id="toc-34-the-front-door-criterion">3.4 The Front-Door Criterion</a>
+    - <a href="#study-question-341" id="toc-study-question-341">Study question
+      3.4.1</a>
+  - <a href="#35-conditional-interventions-and-covariate-specific-effects"
+    id="toc-35-conditional-interventions-and-covariate-specific-effects">3.5
+    Conditional Interventions and Covariate-Specific Effects</a>
+    - <a href="#study-question-351" id="toc-study-question-351">Study question
+      3.5.1</a>
+  - <a href="#38-causal-inference-in-linear-systems"
+    id="toc-38-causal-inference-in-linear-systems">3.8 Causal Inference in
+    Linear Systems</a>
+    - <a href="#study-question-381" id="toc-study-question-381">Study question
+      3.8.1</a>
 
 The following are solutions using the
 [dagitty](https://cran.r-project.org/web/packages/dagitty/index.html) R
@@ -44,7 +64,7 @@ library(dagitty)
 ```
 
 The code below used dagitty version 0.3-2. If the CRAN version is less
-than this version, you can install the current development version with:
+than 0.3-2, you can install the current development version with:
 
 ``` r
 remotes::install_github("jtextor/dagitty/r")
@@ -232,37 +252,32 @@ plot(fig_2.6)
 conditional on the set Z = {R, V}.
 
 ``` r
-v <- c("X", "S", "T", "U", "Y")
-z <- c("R", "V")
-
 pairs <- function(v) {
-  expand_grid(i = seq_along(v), j = seq_along(v)) %>% 
-    filter(i < j) %>% 
-    transmute(x = v[i], y = v[j])
+  expand_grid(x = v, y = v) %>% 
+    filter(x < y)
 }
 
 print_independent <- function(graph, x, y, z = list()) {
-  if (dseparated(graph, X = x, Y = y, Z = z)) {
-    str_glue(
-      "{x} and {y} are independent conditional on the set ",
-      "{{{str_c(z, collapse = ', ')}}}\n\n"
-    ) %>% 
-      cat()
-  }
+  if (dseparated(graph, X = x, Y = y, Z = z))
+    cat(str_glue("{x} _||_ {y} | {str_c(sort(z), collapse = ', ')}\n\n"))
 }
+```
 
-pairs(v) %>% 
+``` r
+z <- c("R", "V")
+
+pairs(setdiff(names(fig_2.5), z)) %>% 
   pwalk(print_independent, graph = fig_2.5, z = z)
 ```
 
-    #> X and S are independent conditional on the set {R, V}
-    #> X and T are independent conditional on the set {R, V}
-    #> X and U are independent conditional on the set {R, V}
-    #> X and Y are independent conditional on the set {R, V}
-    #> S and U are independent conditional on the set {R, V}
-    #> S and Y are independent conditional on the set {R, V}
-    #> T and Y are independent conditional on the set {R, V}
-    #> U and Y are independent conditional on the set {R, V}
+    #> S _||_ U | R, V
+    #> S _||_ X | R, V
+    #> S _||_ Y | R, V
+    #> T _||_ X | R, V
+    #> T _||_ Y | R, V
+    #> U _||_ X | R, V
+    #> U _||_ Y | R, V
+    #> X _||_ Y | R, V
 
 (b) For each pair of nonadjacent variables in Figure 2.5, give a set of
 variables that, when conditioned on, renders that pair independent.
@@ -293,18 +308,17 @@ impliedConditionalIndependencies(fig_2.5)
 conditional on the set Z = {R, P}.
 
 ``` r
-v <- c("X", "S", "T", "U", "V", "Y")
-z <- c("R", "P")
+z <- c("P", "R")
 
-pairs(v) %>% 
+pairs(setdiff(names(fig_2.6), z)) %>% 
   pwalk(print_independent, graph = fig_2.6, z = z)
 ```
 
-    #> X and S are independent conditional on the set {R, P}
-    #> X and T are independent conditional on the set {R, P}
-    #> X and U are independent conditional on the set {R, P}
-    #> X and V are independent conditional on the set {R, P}
-    #> X and Y are independent conditional on the set {R, P}
+    #> S _||_ X | P, R
+    #> T _||_ X | P, R
+    #> U _||_ X | P, R
+    #> V _||_ X | P, R
+    #> X _||_ Y | P, R
 
 (d) For each pair of nonadjacent variables in Figure 2.6, give a set of
 variables that, when conditioned on, renders that pair independent.
@@ -353,15 +367,18 @@ guarantee that the slope b would be equal to zero? \[Hint: Recall, a
 non-zero slope implies that X and Y are dependent given Z.\]
 
 ``` r
-v <- list(list(), "R", "S", "T", "U", "V")
+nodes <- list(list(), "R", "S", "T", "U", "V")
 
-set_names(v) %>% 
-  map_lgl(dseparated, x = fig_2.5, X = "X", Y = "Y") %>% 
-  keep(~ .)
+for (z in nodes)
+  if (dseparated(fig_2.5, X = "X", Y = "Y", Z = z))
+    cat(ifelse(is_empty(z), "list()", z), "\n")
 ```
 
-    #> list()      R      S      U      V 
-    #>   TRUE   TRUE   TRUE   TRUE   TRUE
+    #> list() 
+    #> R 
+    #> S 
+    #> U 
+    #> V
 
 X and Y are marginally independent, so the Z term could be omitted. X
 and Y are conditionally independent when Z is any member of the set {R,
@@ -377,12 +394,16 @@ Which of the coefficients would be zero?
 The coefficients for the following variables.
 
 ``` r
-v <- c("X", "R", "S", "T", "P")
+nodes <- c("P", "R", "S", "T", "X")
 
-intersect(v, dseparated(fig_2.6, X = "Y", Z = v))
+for (x in nodes)
+  if (dseparated(fig_2.6, X = x, Y = "Y", Z = setdiff(nodes, x)))
+    cat(x, "\n")
 ```
 
-    #> [1] "X" "R" "P"
+    #> P 
+    #> R 
+    #> X
 
 ### 2.4 d-separation
 
@@ -411,7 +432,7 @@ fig_2.9 <-
 plot(fig_2.9)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 #### Study question 2.4.1
 
@@ -457,33 +478,35 @@ latents(fig_2.9) <- list()
 they are independent conditional on all other variables.
 
 ``` r
-v <- names(fig_2.9)
+fig_2.9_nodes <- names(fig_2.9)
 
-pairs(v) %>% 
+pairs(fig_2.9_nodes) %>% 
   rowwise() %>% 
-  mutate(z = list(setdiff(v, c(x, y)))) %>% 
+  mutate(z = list(setdiff(fig_2.9_nodes, c(x, y)))) %>% 
   ungroup() %>% 
   pwalk(print_independent, graph = fig_2.9)
 ```
 
-    #> W and Z_1 are independent conditional on the set {X, Y, Z_2, Z_3}
-    #> X and Y are independent conditional on the set {W, Z_1, Z_2, Z_3}
-    #> X and Z_2 are independent conditional on the set {W, Y, Z_1, Z_3}
-    #> Y and Z_1 are independent conditional on the set {W, X, Z_2, Z_3}
+    #> W _||_ Z_1 | X, Y, Z_2, Z_3
+    #> X _||_ Y | W, Z_1, Z_2, Z_3
+    #> X _||_ Z_2 | W, Y, Z_1, Z_3
+    #> Y _||_ Z_1 | W, X, Z_2, Z_3
 
 (d) For every variable V in the graph, find a minimal set of nodes that
 renders V independent of all other variables in the graph.
 
 ``` r
-print_markov_blanket <- function(graph, x) {
+print_markov_blanket <- function(graph, node) {
   str_glue(
-    "Markov blanket of {x}: ",
-    "{{{str_c(sort(markovBlanket(graph, x)), collapse = ', ')}}}\n\n"
+    "Markov blanket of {node}: ",
+    "{{{str_c(sort(markovBlanket(graph, node)), collapse = ', ')}}}\n\n"
   ) %>% 
     cat()
 }
+```
 
-tibble(x = v) %>% 
+``` r
+tibble(node = fig_2.9_nodes) %>% 
   pwalk(print_markov_blanket, graph = fig_2.9)
 ```
 
@@ -500,7 +523,7 @@ that would yield as good an estimate of Y as when we measured all
 variables.
 
 ``` r
-print_markov_blanket(graph = fig_2.9, x = "Y")
+print_markov_blanket(graph = fig_2.9, node = "Y")
 ```
 
     #> Markov blanket of Y: {W, Z_2, Z_3}
@@ -509,7 +532,7 @@ print_markov_blanket(graph = fig_2.9, x = "Y")
 Z_2.
 
 ``` r
-print_markov_blanket(graph = fig_2.9, x = "Z_2")
+print_markov_blanket(graph = fig_2.9, node = "Z_2")
 ```
 
     #> Markov blanket of Z_2: {W, Y, Z_1, Z_3}
@@ -542,11 +565,10 @@ to the input DAG, with undirected edges representing edges that can be
 oriented in either direction.
 
 ``` r
-equivalenceClass(fig_2.9) %>% 
-  plot()
+plot(equivalenceClass(fig_2.9))
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
 
 Since all of the edges are directed in the CPDAG, none of them can be
 reversed.
@@ -604,12 +626,12 @@ impliedConditionalIndependencies(fig_2.9)
     #> Y _||_ Z_1 | W, Z_2, Z_3
     #> Z_1 _||_ Z_2
 
+In this case, Z_3 is not conditionally independent with any other
+variable, so no such regression exists.
+
 ``` r
 latents(fig_2.9) <- list()
 ```
-
-In this case, Z_3 is not conditionally independent with any other
-variable, so no such regression exists.
 
 (g) How many regression equations of the type described in (d) and (e)
 are needed to ensure that the model is fully tested, namely, that if it
@@ -676,7 +698,7 @@ fig_3.8 <-
 plot(fig_3.8)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
 
 #### Study question 3.3.1
 
@@ -753,6 +775,21 @@ backdoor_sets(fig_3.8, exposure = c("D", "W"), outcome = "Y", type = "minimal")
     #> { Z }
     #> { C, X }
 
+### 3.4 The Front-Door Criterion
+
+#### Study question 3.4.1
+
+Assume that in Figure 3.8, only X, Y, and one additional variable can be
+measured. Which variable would allow the identification of the effect of
+X on Y? What would that effect be?
+
+This question can be
+[answered](https://github.com/behrman/cis/blob/master/solutions_pgmpy.ipynb#3.4.1)
+by using the pgmpy method
+`pgmpy.inference.CausalInference.get_all_frontdoor_adjustment_sets()` to
+show that W is a front-door adjustment set. There is no comparable
+functionality in dagitty as of version 0.3-2.
+
 ### 3.5 Conditional Interventions and Covariate-Specific Effects
 
 #### Study question 3.5.1
@@ -822,7 +859,7 @@ fig_3.18 <-
 plot(fig_3.18)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
+![](solutions_dagitty_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
 
 #### Study question 3.8.1
 
@@ -892,17 +929,17 @@ impliedConditionalIndependencies(fig_3.18)
 
     #> W_3 _||_ Z_3 | X
 
+W_3 and Z_3 are independent conditional on X.
+
 ``` r
 latents(fig_3.18) <- list()
 ```
-
-W_3 and Z_3 are independent conditional on X.
 
 (e) If we regress Z_1 on all other variables in the model, which
 regression coefficients will be zero?
 
 ``` r
-print_markov_blanket(graph = fig_3.18, x = "Z_1")
+print_markov_blanket(graph = fig_3.18, node = "Z_1")
 ```
 
     #> Markov blanket of Z_1: {W_1, Z_2, Z_3}
@@ -930,8 +967,8 @@ instrumentalVariables(fig_3.18, exposure = "Z_3", outcome = "Y")
 
     #>  Z_1 |  W_1
 
+Z_1 becomes an instrumental variable when conditioned on W_1.
+
 ``` r
 latents(fig_3.18) <- list()
 ```
-
-Z_1 becomes an instrumental variable when conditioned on W_1.

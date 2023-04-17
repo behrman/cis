@@ -37,6 +37,10 @@ vignettes/*.pdf
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
 
+# DataSpell files
+.idea/
+.ipynb_checkpoints/
+
 # macOS file
 .DS_Store
 

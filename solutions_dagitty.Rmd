@@ -37,7 +37,7 @@ library(tidyverse)
 library(dagitty)
 ```
 
-The code below used dagitty version `r sessioninfo::package_info("dagitty", dependencies = FALSE)$loadedversion`. If the CRAN version is less than this version, you can install the current development version with:
+The code below used dagitty version `r sessioninfo::package_info("dagitty", dependencies = FALSE)$loadedversion`. If the CRAN version is less than 0.3-2, you can install the current development version with:
 
 ```{r eval=FALSE}
 remotes::install_github("jtextor/dagitty/r")
@@ -192,26 +192,21 @@ plot(fig_2.6)
 (a)&nbsp;List all pairs of variables in Figure 2.5 that are independent conditional on the set Z = {R, V}.
 
 ```{r}
-v <- c("X", "S", "T", "U", "Y")
-z <- c("R", "V")
-
 pairs <- function(v) {
-  expand_grid(i = seq_along(v), j = seq_along(v)) %>% 
-    filter(i < j) %>% 
-    transmute(x = v[i], y = v[j])
+  expand_grid(x = v, y = v) %>% 
+    filter(x < y)
 }
 
 print_independent <- function(graph, x, y, z = list()) {
-  if (dseparated(graph, X = x, Y = y, Z = z)) {
-    str_glue(
-      "{x} and {y} are independent conditional on the set ",
-      "{{{str_c(z, collapse = ', ')}}}\n\n"
-    ) %>% 
-      cat()
-  }
+  if (dseparated(graph, X = x, Y = y, Z = z))
+    cat(str_glue("{x} _||_ {y} | {str_c(sort(z), collapse = ', ')}\n\n"))
 }
+```
 
-pairs(v) %>% 
+```{r}
+z <- c("R", "V")
+
+pairs(setdiff(names(fig_2.5), z)) %>% 
   pwalk(print_independent, graph = fig_2.5, z = z)
 ```
 
@@ -224,10 +219,9 @@ impliedConditionalIndependencies(fig_2.5)
 (c)&nbsp;List all pairs of variables in Figure 2.6 that are independent conditional on the set Z = {R, P}.
 
 ```{r}
-v <- c("X", "S", "T", "U", "V", "Y")
-z <- c("R", "P")
+z <- c("P", "R")
 
-pairs(v) %>% 
+pairs(setdiff(names(fig_2.6), z)) %>% 
   pwalk(print_independent, graph = fig_2.6, z = z)
 ```
 
@@ -244,11 +238,11 @@ Y = a + b * X + c * Z .
 Which of the variables in the model may be chosen for Z so as to guarantee that the slope b would be equal to zero? [Hint: Recall, a non-zero slope implies that X and Y are dependent given Z.]
 
 ```{r}
-v <- list(list(), "R", "S", "T", "U", "V")
+nodes <- list(list(), "R", "S", "T", "U", "V")
 
-set_names(v) %>% 
-  map_lgl(dseparated, x = fig_2.5, X = "X", Y = "Y") %>% 
-  keep(~ .)
+for (z in nodes)
+  if (dseparated(fig_2.5, X = "X", Y = "Y", Z = z))
+    cat(ifelse(is_empty(z), "list()", z), "\n")
 ```
 
 X and Y are marginally independent, so the Z term could be omitted. X and Y are conditionally independent when Z is any member of the set {R, S, U, V}.
@@ -262,9 +256,11 @@ Which of the coefficients would be zero?
 The coefficients for the following variables.
 
 ```{r}
-v <- c("X", "R", "S", "T", "P")
+nodes <- c("P", "R", "S", "T", "X")
 
-intersect(v, dseparated(fig_2.6, X = "Y", Z = v))
+for (x in nodes)
+  if (dseparated(fig_2.6, X = x, Y = "Y", Z = setdiff(nodes, x)))
+    cat(x, "\n")
 ```
 
 ### 2.4 d-separation
@@ -316,11 +312,11 @@ latents(fig_2.9) <- list()
 (c)&nbsp;For each pair of nonadjacent nodes in the graph, determine whether they are independent conditional on all other variables.
 
 ```{r}
-v <- names(fig_2.9)
+fig_2.9_nodes <- names(fig_2.9)
 
-pairs(v) %>% 
+pairs(fig_2.9_nodes) %>% 
   rowwise() %>% 
-  mutate(z = list(setdiff(v, c(x, y)))) %>% 
+  mutate(z = list(setdiff(fig_2.9_nodes, c(x, y)))) %>% 
   ungroup() %>% 
   pwalk(print_independent, graph = fig_2.9)
 ```
@@ -328,28 +324,30 @@ pairs(v) %>%
 (d)&nbsp;For every variable V in the graph, find a minimal set of nodes that renders V independent of all other variables in the graph.
 
 ```{r}
-print_markov_blanket <- function(graph, x) {
+print_markov_blanket <- function(graph, node) {
   str_glue(
-    "Markov blanket of {x}: ",
-    "{{{str_c(sort(markovBlanket(graph, x)), collapse = ', ')}}}\n\n"
+    "Markov blanket of {node}: ",
+    "{{{str_c(sort(markovBlanket(graph, node)), collapse = ', ')}}}\n\n"
   ) %>% 
     cat()
 }
+```
 
-tibble(x = v) %>% 
+```{r}
+tibble(node = fig_2.9_nodes) %>% 
   pwalk(print_markov_blanket, graph = fig_2.9)
 ```
 
 (e)&nbsp;Suppose we wish to estimate the value of Y from measurements taken on all other variables in the model. Find the smallest set of variables that would yield as good an estimate of Y as when we measured all variables.
 
 ```{r}
-print_markov_blanket(graph = fig_2.9, x = "Y")
+print_markov_blanket(graph = fig_2.9, node = "Y")
 ```
 
 (f)&nbsp;Repeat question (e) assuming that we wish to estimate the value of Z_2.
 
 ```{r}
-print_markov_blanket(graph = fig_2.9, x = "Z_2")
+print_markov_blanket(graph = fig_2.9, node = "Z_2")
 ```
 
 (g)&nbsp;Suppose we wish to predict the value of Z_2 from measurements of Z_3. Would the quality of our prediction improve if we add measurement of W? Explain.
@@ -369,8 +367,7 @@ When conditioned on Z_3, the variables W and Z_2 are connected, hence they are n
 `dagitty::equivalenceClass()` generates a complete partially directed graph (CPDAG) that represents all the graphs that are Markov equivalent to the input DAG, with undirected edges representing edges that can be oriented in either direction.
 
 ```{r}
-equivalenceClass(fig_2.9) %>% 
-  plot()
+plot(equivalenceClass(fig_2.9))
 ```
 
 Since all of the edges are directed in the CPDAG, none of them can be reversed.
@@ -405,11 +402,13 @@ Assuming that X is not measured, we will convert it to a latent variable.
 latents(fig_2.9) <- "X"
 
 impliedConditionalIndependencies(fig_2.9)
-
-latents(fig_2.9) <- list()
 ```
 
 In this case, Z_3 is not conditionally independent with any other variable, so no such regression exists.
+
+```{r}
+latents(fig_2.9) <- list()
+```
 
 (g)&nbsp;How many regression equations of the type described in (d) and (e) are needed to ensure that the model is fully tested, namely, that if it passes all these tests, it cannot be refuted by additional tests of this kind. [Hint: Ensure that you test every vanishing partial regression coefficient that is implied by the product decomposition (1.29).]
 
@@ -497,6 +496,14 @@ Repeat, for the effect of {D, W} on Y.
 backdoor_sets(fig_3.8, exposure = c("D", "W"), outcome = "Y", type = "minimal")
 ```
 
+### 3.4 The Front-Door Criterion
+
+#### Study question 3.4.1
+
+Assume that in Figure 3.8, only X, Y, and one additional variable can be measured. Which variable would allow the identification of the effect of X on Y? What would that effect be?
+
+This question can be [answered](https://github.com/behrman/cis/blob/master/solutions_pgmpy.ipynb#3.4.1) by using the pgmpy method `pgmpy.inference.CausalInference.get_all_frontdoor_adjustment_sets()` to show that W is a front-door adjustment set. There is no comparable functionality in dagitty as of version `r sessioninfo::package_info("dagitty", dependencies = FALSE)$loadedversion`.
+
 ### 3.5 Conditional Interventions and Covariate-Specific Effects
 
 #### Study question 3.5.1
@@ -572,16 +579,18 @@ The above conditional independencies are all testable implications of this model
 latents(fig_3.18) <- setdiff(names(fig_3.18), c("W_3", "X", "Y", "Z_3"))
 
 impliedConditionalIndependencies(fig_3.18)
-
-latents(fig_3.18) <- list()
 ```
 
 W_3 and Z_3 are independent conditional on X.
 
+```{r}
+latents(fig_3.18) <- list()
+```
+
 (e)&nbsp;If we regress Z_1 on all other variables in the model, which regression coefficients will be zero?
 
 ```{r}
-print_markov_blanket(graph = fig_3.18, x = "Z_1")
+print_markov_blanket(graph = fig_3.18, node = "Z_1")
 
 setdiff(names(fig_3.18), union("Z_1", markovBlanket(fig_3.18, "Z_1")))
 ```
@@ -594,8 +603,11 @@ Z_1 is d-separated from the variables {W_2, W_3, X, Y} by the set {W_1, Z_2, Z_3
 latents(fig_3.18) <- c("W_2", "Z_2")
 
 instrumentalVariables(fig_3.18, exposure = "Z_3", outcome = "Y")
-
-latents(fig_3.18) <- list()
 ```
 
 Z_1 becomes an instrumental variable when conditioned on W_1.
+
+```{r}
+latents(fig_3.18) <- list()
+```
+
