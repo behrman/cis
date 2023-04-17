@@ -502,7 +502,7 @@ backdoor_sets(fig_3.8, exposure = c("D", "W"), outcome = "Y", type = "minimal")
 
 Assume that in Figure 3.8, only X, Y, and one additional variable can be measured. Which variable would allow the identification of the effect of X on Y? What would that effect be?
 
-This question can be [answered](https://github.com/behrman/cis/blob/master/solutions_pgmpy.ipynb#3.4.1) by using the pgmpy method `pgmpy.inference.CausalInference.get_all_frontdoor_adjustment_sets()` to show that W is a front-door adjustment set. There is no comparable functionality in dagitty as of version `r sessioninfo::package_info("dagitty", dependencies = FALSE)$loadedversion`.
+This question can be [answered](https://github.com/behrman/cis/blob/master/solutions_pgmpy.ipynb) by using the pgmpy method `pgmpy.inference.CausalInference.get_all_frontdoor_adjustment_sets()` to show that W is a front-door adjustment set. There is no comparable functionality in dagitty as of version `r sessioninfo::package_info("dagitty", dependencies = FALSE)$loadedversion`.
 
 ### 3.5 Conditional Interventions and Covariate-Specific Effects
 

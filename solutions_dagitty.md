@@ -784,7 +784,7 @@ measured. Which variable would allow the identification of the effect of
 X on Y? What would that effect be?
 
 This question can be
-[answered](https://github.com/behrman/cis/blob/master/solutions_pgmpy.ipynb#3.4.1)
+[answered](https://github.com/behrman/cis/blob/master/solutions_pgmpy.ipynb)
 by using the pgmpy method
 `pgmpy.inference.CausalInference.get_all_frontdoor_adjustment_sets()` to
 show that W is a front-door adjustment set. There is no comparable
