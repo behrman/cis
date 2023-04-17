@@ -14,4 +14,4 @@ using the [dagitty](https://cran.r-project.org/web/packages/dagitty/) R package 
 * [dagitty solutions](solutions_dagitty.md)
 * [pgmpy solutions](solutions_pgmpy.ipynb)
 
-The [book's website](http://bayes.cs.ucla.edu/PRIMER/) contains PDFs for each chapter.
+The [book's website](http://bayes.cs.ucla.edu/PRIMER/) contains PDFs for each chapter. 

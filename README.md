@@ -13,4 +13,4 @@ package and the [pgmpy](https://pgmpy.org/) Python package.
 - [pgmpy solutions](solutions_pgmpy.ipynb)
 
 The [book’s website](http://bayes.cs.ucla.edu/PRIMER/) contains PDFs for
-each chapter.
+each chapter. 
