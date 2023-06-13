@@ -1,51 +1,46 @@
 Causal Inference in Statistics: A Primer
 ================
 Bill Behrman
-2023-04-17
+2023-06-13
 
-- <a href="#1-preliminaries-statistical-and-causal-models"
-  id="toc-1-preliminaries-statistical-and-causal-models">1 Preliminaries:
+- <a href="#preliminaries-statistical-and-causal-models"
+  id="toc-preliminaries-statistical-and-causal-models">1 Preliminaries:
   Statistical and Causal Models</a>
-  - <a href="#14-graphs" id="toc-14-graphs">1.4 Graphs</a>
-    - <a href="#study-question-141" id="toc-study-question-141">Study question
-      1.4.1</a>
-    - <a href="#study-question-151" id="toc-study-question-151">Study question
-      1.5.1</a>
-- <a href="#2-graphical-models-and-their-applications"
-  id="toc-2-graphical-models-and-their-applications">2 Graphical Models
-  and Their Applications</a>
-  - <a href="#23-colliders" id="toc-23-colliders">2.3 Colliders</a>
-    - <a href="#study-question-231" id="toc-study-question-231">Study question
-      2.3.1</a>
-  - <a href="#24-d-separation" id="toc-24-d-separation">2.4 d-separation</a>
-    - <a href="#study-question-241" id="toc-study-question-241">Study question
-      2.4.1</a>
-  - <a href="#25-model-testing-and-causal-search"
-    id="toc-25-model-testing-and-causal-search">2.5 Model Testing and Causal
+  - <a href="#graphs" id="toc-graphs">1.4 Graphs</a>
+    - <a href="#study-question-1.4.1" id="toc-study-question-1.4.1">Study
+      question 1.4.1</a>
+    - <a href="#study-question-1.5.1" id="toc-study-question-1.5.1">Study
+      question 1.5.1</a>
+- <a href="#graphical-models-and-their-applications"
+  id="toc-graphical-models-and-their-applications">2 Graphical Models and
+  Their Applications</a>
+  - <a href="#colliders" id="toc-colliders">2.3 Colliders</a>
+    - <a href="#study-question-2.3.1" id="toc-study-question-2.3.1">Study
+      question 2.3.1</a>
+  - <a href="#d-separation" id="toc-d-separation">2.4 d-separation</a>
+    - <a href="#study-question-2.4.1" id="toc-study-question-2.4.1">Study
+      question 2.4.1</a>
+  - <a href="#model-testing-and-causal-search"
+    id="toc-model-testing-and-causal-search">2.5 Model Testing and Causal
     Search</a>
-    - <a href="#study-question-251" id="toc-study-question-251">Study question
-      2.5.1</a>
-- <a href="#3-the-effects-of-interventions"
-  id="toc-3-the-effects-of-interventions">3 The Effects of
-  Interventions</a>
-  - <a href="#33-the-backdoor-criterion"
-    id="toc-33-the-backdoor-criterion">3.3 The Backdoor Criterion</a>
-    - <a href="#study-question-331" id="toc-study-question-331">Study question
-      3.3.1</a>
-  - <a href="#34-the-front-door-criterion"
-    id="toc-34-the-front-door-criterion">3.4 The Front-Door Criterion</a>
-    - <a href="#study-question-341" id="toc-study-question-341">Study question
-      3.4.1</a>
-  - <a href="#35-conditional-interventions-and-covariate-specific-effects"
-    id="toc-35-conditional-interventions-and-covariate-specific-effects">3.5
+    - <a href="#study-question-2.5.1" id="toc-study-question-2.5.1">Study
+      question 2.5.1</a>
+- <a href="#the-effects-of-interventions"
+  id="toc-the-effects-of-interventions">3 The Effects of Interventions</a>
+  - <a href="#the-backdoor-criterion" id="toc-the-backdoor-criterion">3.3
+    The Backdoor Criterion</a>
+    - <a href="#study-question-3.3.1" id="toc-study-question-3.3.1">Study
+      question 3.3.1</a>
+  - <a href="#conditional-interventions-and-covariate-specific-effects"
+    id="toc-conditional-interventions-and-covariate-specific-effects">3.5
     Conditional Interventions and Covariate-Specific Effects</a>
-    - <a href="#study-question-351" id="toc-study-question-351">Study question
-      3.5.1</a>
-  - <a href="#38-causal-inference-in-linear-systems"
-    id="toc-38-causal-inference-in-linear-systems">3.8 Causal Inference in
+    - <a href="#study-question-3.5.1" id="toc-study-question-3.5.1">Study
+      question 3.5.1</a>
+  - <a href="#causal-inference-in-linear-systems"
+    id="toc-causal-inference-in-linear-systems">3.8 Causal Inference in
     Linear Systems</a>
-    - <a href="#study-question-381" id="toc-study-question-381">Study question
-      3.8.1</a>
+    - <a href="#study-question-3.8.1" id="toc-study-question-3.8.1">Study
+      question 3.8.1</a>
 
 The following are solutions using the
 [dagitty](https://cran.r-project.org/web/packages/dagitty/index.html) R
@@ -63,7 +58,7 @@ library(tidyverse)
 library(dagitty)
 ```
 
-The code below used dagitty version 0.3-2. If the CRAN version is less
+The code below uses dagitty version 0.3-2. If the CRAN version is less
 than 0.3-2, you can install the current development version with:
 
 ``` r
@@ -96,7 +91,7 @@ fig_1.8 <-
 plot(fig_1.8)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](solutions_dagitty_files/figure-commonmark/fig_1.8-1.png)
 
 #### Study question 1.4.1
 
@@ -138,9 +133,15 @@ descendants(fig_1.8, "W", proper = TRUE)
 more than once).
 
 ``` r
-paths(fig_1.8, from = "X", to = "T", directed = FALSE) %>% 
-  pluck("paths") %>%
-  cat(sep = "\n")
+print_paths <- function(graph, from, to, ...) {
+  paths(graph, from = from, to = to, ...) |> 
+    pluck("paths") |>
+    cat(sep = "\n")
+}
+```
+
+``` r
+print_paths(fig_1.8, from = "X", to = "T")
 ```
 
     #> X -> W -> Y -> T
@@ -154,9 +155,7 @@ paths(fig_1.8, from = "X", to = "T", directed = FALSE) %>%
 (f) Draw all the directed paths between X and T.
 
 ``` r
-paths(fig_1.8, from = "X", to = "T", directed = TRUE) %>%
-  pluck("paths") %>%
-  cat(sep = "\n")
+print_paths(fig_1.8, from = "X", to = "T", directed = TRUE)
 ```
 
     #> X -> W -> Y -> T
@@ -191,7 +190,7 @@ graph <-
 plot(graph)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](solutions_dagitty_files/figure-commonmark/graph-1.png)
 
 ## 2 Graphical Models and Their Applications
 
@@ -219,7 +218,7 @@ fig_2.5 <-
 plot(fig_2.5)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](solutions_dagitty_files/figure-commonmark/fig_2.5-1.png)
 
 Figure 2.6. A directed graph in which P is a descendant of a collider.
 
@@ -244,7 +243,7 @@ fig_2.6 <-
 plot(fig_2.6)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](solutions_dagitty_files/figure-commonmark/fig_2.6-1.png)
 
 #### Study question 2.3.1
 
@@ -253,56 +252,64 @@ conditional on the set Z = {R, V}.
 
 ``` r
 pairs <- function(v) {
-  expand_grid(x = v, y = v) %>% 
+  expand_grid(x = v, y = v) |> 
     filter(x < y)
 }
 
 print_independent <- function(graph, x, y, z = list()) {
   if (dseparated(graph, X = x, Y = y, Z = z))
-    cat(str_glue("{x} _||_ {y} | {str_c(sort(z), collapse = ', ')}\n\n"))
+    cat(str_glue("{x} \u27c2 {y} | {str_c(sort(z), collapse = ', ')}\n\n"))
 }
 ```
 
 ``` r
 z <- c("R", "V")
 
-pairs(setdiff(names(fig_2.5), z)) %>% 
+pairs(setdiff(names(fig_2.5), z)) |> 
   pwalk(print_independent, graph = fig_2.5, z = z)
 ```
 
-    #> S _||_ U | R, V
-    #> S _||_ X | R, V
-    #> S _||_ Y | R, V
-    #> T _||_ X | R, V
-    #> T _||_ Y | R, V
-    #> U _||_ X | R, V
-    #> U _||_ Y | R, V
-    #> X _||_ Y | R, V
+    #> S ⟂ U | R, V
+    #> S ⟂ X | R, V
+    #> S ⟂ Y | R, V
+    #> T ⟂ X | R, V
+    #> T ⟂ Y | R, V
+    #> U ⟂ X | R, V
+    #> U ⟂ Y | R, V
+    #> X ⟂ Y | R, V
 
 (b) For each pair of nonadjacent variables in Figure 2.5, give a set of
 variables that, when conditioned on, renders that pair independent.
 
 ``` r
-impliedConditionalIndependencies(fig_2.5)
+print_implied_conditional_independencies <- function(graph, ...) {
+  impliedConditionalIndependencies(graph, ...) |> 
+    map_chr(\(x) str_replace(as.character(x), fixed("_||_"), "\u27c2")) |>
+    cat(sep = "\n")
+}
 ```
 
-    #> R _||_ T | S
-    #> R _||_ U
-    #> R _||_ V
-    #> R _||_ Y
-    #> S _||_ U
-    #> S _||_ V
-    #> S _||_ X | R
-    #> S _||_ Y
-    #> T _||_ V | U
-    #> T _||_ X | R
-    #> T _||_ X | S
-    #> T _||_ Y | V
-    #> T _||_ Y | U
-    #> U _||_ X
-    #> U _||_ Y | V
-    #> V _||_ X
-    #> X _||_ Y
+``` r
+print_implied_conditional_independencies(fig_2.5)
+```
+
+    #> R ⟂ T | S
+    #> R ⟂ U
+    #> R ⟂ V
+    #> R ⟂ Y
+    #> S ⟂ U
+    #> S ⟂ V
+    #> S ⟂ X | R
+    #> S ⟂ Y
+    #> T ⟂ V | U
+    #> T ⟂ X | R
+    #> T ⟂ X | S
+    #> T ⟂ Y | V
+    #> T ⟂ Y | U
+    #> U ⟂ X
+    #> U ⟂ Y | V
+    #> V ⟂ X
+    #> X ⟂ Y
 
 (c) List all pairs of variables in Figure 2.6 that are independent
 conditional on the set Z = {R, P}.
@@ -310,52 +317,52 @@ conditional on the set Z = {R, P}.
 ``` r
 z <- c("P", "R")
 
-pairs(setdiff(names(fig_2.6), z)) %>% 
+pairs(setdiff(names(fig_2.6), z)) |> 
   pwalk(print_independent, graph = fig_2.6, z = z)
 ```
 
-    #> S _||_ X | P, R
-    #> T _||_ X | P, R
-    #> U _||_ X | P, R
-    #> V _||_ X | P, R
-    #> X _||_ Y | P, R
+    #> S ⟂ X | P, R
+    #> T ⟂ X | P, R
+    #> U ⟂ X | P, R
+    #> V ⟂ X | P, R
+    #> X ⟂ Y | P, R
 
 (d) For each pair of nonadjacent variables in Figure 2.6, give a set of
 variables that, when conditioned on, renders that pair independent.
 
 ``` r
-impliedConditionalIndependencies(fig_2.6)
+print_implied_conditional_independencies(fig_2.6)
 ```
 
-    #> P _||_ R | S
-    #> P _||_ R | T
-    #> P _||_ S | T
-    #> P _||_ U | T
-    #> P _||_ V | U
-    #> P _||_ V | T
-    #> P _||_ X | R
-    #> P _||_ X | S
-    #> P _||_ X | T
-    #> P _||_ Y | V
-    #> P _||_ Y | U
-    #> P _||_ Y | T
-    #> R _||_ T | S
-    #> R _||_ U
-    #> R _||_ V
-    #> R _||_ Y
-    #> S _||_ U
-    #> S _||_ V
-    #> S _||_ X | R
-    #> S _||_ Y
-    #> T _||_ V | U
-    #> T _||_ X | R
-    #> T _||_ X | S
-    #> T _||_ Y | V
-    #> T _||_ Y | U
-    #> U _||_ X
-    #> U _||_ Y | V
-    #> V _||_ X
-    #> X _||_ Y
+    #> P ⟂ R | S
+    #> P ⟂ R | T
+    #> P ⟂ S | T
+    #> P ⟂ U | T
+    #> P ⟂ V | U
+    #> P ⟂ V | T
+    #> P ⟂ X | R
+    #> P ⟂ X | S
+    #> P ⟂ X | T
+    #> P ⟂ Y | V
+    #> P ⟂ Y | U
+    #> P ⟂ Y | T
+    #> R ⟂ T | S
+    #> R ⟂ U
+    #> R ⟂ V
+    #> R ⟂ Y
+    #> S ⟂ U
+    #> S ⟂ V
+    #> S ⟂ X | R
+    #> S ⟂ Y
+    #> T ⟂ V | U
+    #> T ⟂ X | R
+    #> T ⟂ X | S
+    #> T ⟂ Y | V
+    #> T ⟂ Y | U
+    #> U ⟂ X
+    #> U ⟂ Y | V
+    #> V ⟂ X
+    #> X ⟂ Y
 
 (e) Suppose we generate data by the model described in Figure 2.5, and
 we fit them with the linear equation
@@ -432,7 +439,7 @@ fig_2.9 <-
 plot(fig_2.9)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](solutions_dagitty_files/figure-commonmark/fig_2.9-1.png)
 
 #### Study question 2.4.1
 
@@ -441,19 +448,19 @@ variables that d-separates that pair. What does this list tell us about
 independencies in the data?
 
 ``` r
-impliedConditionalIndependencies(fig_2.9)
+print_implied_conditional_independencies(fig_2.9)
 ```
 
-    #> W _||_ Z_1 | X
-    #> W _||_ Z_2 | Z_1, Z_3
-    #> W _||_ Z_2 | X
-    #> W _||_ Z_3 | X
-    #> X _||_ Y | W, Z_2, Z_3
-    #> X _||_ Y | W, Z_1, Z_3
-    #> X _||_ Z_2 | Z_1, Z_3
-    #> Y _||_ Z_1 | X, Z_2, Z_3
-    #> Y _||_ Z_1 | W, Z_2, Z_3
-    #> Z_1 _||_ Z_2
+    #> W ⟂ Z_1 | X
+    #> W ⟂ Z_2 | Z_1, Z_3
+    #> W ⟂ Z_2 | X
+    #> W ⟂ Z_3 | X
+    #> X ⟂ Y | W, Z_2, Z_3
+    #> X ⟂ Y | W, Z_1, Z_3
+    #> X ⟂ Z_2 | Z_1, Z_3
+    #> Y ⟂ Z_1 | X, Z_2, Z_3
+    #> Y ⟂ Z_1 | W, Z_2, Z_3
+    #> Z_1 ⟂ Z_2
 
 For the data to be consistent with the causal model represented by the
 graph, they should reflect the above conditional independencies.
@@ -464,11 +471,11 @@ X, Z_1} can be measured.
 ``` r
 latents(fig_2.9) <- setdiff(names(fig_2.9), c("W", "X", "Z_1", "Z_3"))
 
-impliedConditionalIndependencies(fig_2.9)
+print_implied_conditional_independencies(fig_2.9)
 ```
 
-    #> W _||_ Z_1 | X
-    #> W _||_ Z_3 | X
+    #> W ⟂ Z_1 | X
+    #> W ⟂ Z_3 | X
 
 ``` r
 latents(fig_2.9) <- list()
@@ -480,17 +487,17 @@ they are independent conditional on all other variables.
 ``` r
 fig_2.9_nodes <- names(fig_2.9)
 
-pairs(fig_2.9_nodes) %>% 
-  rowwise() %>% 
-  mutate(z = list(setdiff(fig_2.9_nodes, c(x, y)))) %>% 
-  ungroup() %>% 
+pairs(fig_2.9_nodes) |> 
+  rowwise() |> 
+  mutate(z = list(setdiff(fig_2.9_nodes, c(x, y)))) |> 
+  ungroup() |> 
   pwalk(print_independent, graph = fig_2.9)
 ```
 
-    #> W _||_ Z_1 | X, Y, Z_2, Z_3
-    #> X _||_ Y | W, Z_1, Z_2, Z_3
-    #> X _||_ Z_2 | W, Y, Z_1, Z_3
-    #> Y _||_ Z_1 | W, X, Z_2, Z_3
+    #> W ⟂ Z_1 | X, Y, Z_2, Z_3
+    #> X ⟂ Y | W, Z_1, Z_2, Z_3
+    #> X ⟂ Z_2 | W, Y, Z_1, Z_3
+    #> Y ⟂ Z_1 | W, X, Z_2, Z_3
 
 (d) For every variable V in the graph, find a minimal set of nodes that
 renders V independent of all other variables in the graph.
@@ -500,13 +507,13 @@ print_markov_blanket <- function(graph, node) {
   str_glue(
     "Markov blanket of {node}: ",
     "{{{str_c(sort(markovBlanket(graph, node)), collapse = ', ')}}}\n\n"
-  ) %>% 
+  ) |> 
     cat()
 }
 ```
 
 ``` r
-tibble(node = fig_2.9_nodes) %>% 
+tibble(node = fig_2.9_nodes) |> 
   pwalk(print_markov_blanket, graph = fig_2.9)
 ```
 
@@ -568,7 +575,7 @@ oriented in either direction.
 plot(equivalenceClass(fig_2.9))
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+![](solutions_dagitty_files/figure-commonmark/equivalence-class-fig_2.9-1.png)
 
 Since all of the edges are directed in the CPDAG, none of them can be
 reversed.
@@ -580,19 +587,19 @@ wrong.
 Here are the conditional independencies for `fig_2.9`.
 
 ``` r
-impliedConditionalIndependencies(fig_2.9)
+print_implied_conditional_independencies(fig_2.9)
 ```
 
-    #> W _||_ Z_1 | X
-    #> W _||_ Z_2 | Z_1, Z_3
-    #> W _||_ Z_2 | X
-    #> W _||_ Z_3 | X
-    #> X _||_ Y | W, Z_2, Z_3
-    #> X _||_ Y | W, Z_1, Z_3
-    #> X _||_ Z_2 | Z_1, Z_3
-    #> Y _||_ Z_1 | X, Z_2, Z_3
-    #> Y _||_ Z_1 | W, Z_2, Z_3
-    #> Z_1 _||_ Z_2
+    #> W ⟂ Z_1 | X
+    #> W ⟂ Z_2 | Z_1, Z_3
+    #> W ⟂ Z_2 | X
+    #> W ⟂ Z_3 | X
+    #> X ⟂ Y | W, Z_2, Z_3
+    #> X ⟂ Y | W, Z_1, Z_3
+    #> X ⟂ Z_2 | Z_1, Z_3
+    #> Y ⟂ Z_1 | X, Z_2, Z_3
+    #> Y ⟂ Z_1 | W, Z_2, Z_3
+    #> Z_1 ⟂ Z_2
 
 If we assume that the model is correct and linear, then the conditional
 independence of X and Y conditioned on {W, Z_2, Z_3} would imply that
@@ -619,12 +626,12 @@ variable.
 ``` r
 latents(fig_2.9) <- "X"
 
-impliedConditionalIndependencies(fig_2.9)
+print_implied_conditional_independencies(fig_2.9)
 ```
 
-    #> W _||_ Z_2 | Z_1, Z_3
-    #> Y _||_ Z_1 | W, Z_2, Z_3
-    #> Z_1 _||_ Z_2
+    #> W ⟂ Z_2 | Z_1, Z_3
+    #> Y ⟂ Z_1 | W, Z_2, Z_3
+    #> Z_1 ⟂ Z_2
 
 In this case, Z_3 is not conditionally independent with any other
 variable, so no such regression exists.
@@ -643,14 +650,14 @@ The following generates testable implications for every applicable node
 of `fig_2.9`.
 
 ``` r
-impliedConditionalIndependencies(fig_2.9, type = "basis.set")
+print_implied_conditional_independencies(fig_2.9, type = "basis.set")
 ```
 
-    #> W _||_ Z_1, Z_2, Z_3 | X
-    #> X _||_ Z_2 | Z_1, Z_3
-    #> Y _||_ X, Z_1 | W, Z_2, Z_3
-    #> Z_1 _||_ Z_2
-    #> Z_2 _||_ Z_1
+    #> W ⟂ Z_1, Z_2, Z_3 | X
+    #> X ⟂ Z_2 | Z_1, Z_3
+    #> Y ⟂ X, Z_1 | W, Z_2, Z_3
+    #> Z_1 ⟂ Z_2
+    #> Z_2 ⟂ Z_1
 
 Since the last two implications are equivalent, we have the following
 regression equations:
@@ -698,7 +705,7 @@ fig_3.8 <-
 plot(fig_3.8)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
+![](solutions_dagitty_files/figure-commonmark/fig_3.8-1.png)
 
 #### Study question 3.3.1
 
@@ -713,9 +720,10 @@ to find adjustment sets and then remove any sets that contain
 descendants of the exposure.
 
 ``` r
-backdoor_sets <- function(graph, exposure, outcome, type) {
-  adjustmentSets(graph, exposure = exposure, outcome = outcome, type = type) %>% 
-    keep(~ is_empty(intersect(., descendants(graph, exposure, proper = TRUE))))
+backdoor_sets <- function(graph, exposure, outcome, ...) {
+  exposure_descendants <- descendants(graph, exposure, proper = TRUE)
+  adjustmentSets(graph, exposure = exposure, outcome = outcome, ...) |> 
+    keep(\(x) is_empty(intersect(x, exposure_descendants)))
 }
 ```
 
@@ -745,7 +753,7 @@ variables such that, if you removed any one of the variables from the
 set, it would no longer meet the criterion).
 
 ``` r
-backdoor_sets(fig_3.8, exposure = "X", outcome = "Y", type = "minimal")
+backdoor_sets(fig_3.8, exposure = "X", outcome = "Y")
 ```
 
     #> { D, Z }
@@ -757,7 +765,7 @@ backdoor_sets(fig_3.8, exposure = "X", outcome = "Y", type = "minimal")
 identify the effect of D on Y.
 
 ``` r
-backdoor_sets(fig_3.8, exposure = "D", outcome = "Y", type = "minimal")
+backdoor_sets(fig_3.8, exposure = "D", outcome = "Y")
 ```
 
     #> { W, Z }
@@ -769,26 +777,11 @@ backdoor_sets(fig_3.8, exposure = "D", outcome = "Y", type = "minimal")
 Repeat, for the effect of {D, W} on Y.
 
 ``` r
-backdoor_sets(fig_3.8, exposure = c("D", "W"), outcome = "Y", type = "minimal")
+backdoor_sets(fig_3.8, exposure = c("D", "W"), outcome = "Y")
 ```
 
     #> { Z }
     #> { C, X }
-
-### 3.4 The Front-Door Criterion
-
-#### Study question 3.4.1
-
-Assume that in Figure 3.8, only X, Y, and one additional variable can be
-measured. Which variable would allow the identification of the effect of
-X on Y? What would that effect be?
-
-This question can be
-[answered](https://github.com/behrman/cis/blob/master/solutions_pgmpy.ipynb)
-by using the pgmpy method
-`pgmpy.inference.CausalInference.get_all_frontdoor_adjustment_sets()` to
-show that W is a front-door adjustment set. There is no comparable
-functionality in dagitty as of version 0.3-2.
 
 ### 3.5 Conditional Interventions and Covariate-Specific Effects
 
@@ -801,7 +794,7 @@ Consider the causal model of Figure 3.8.
 ``` r
 adjustedNodes(fig_3.8) <- "C"
 
-backdoor_sets(fig_3.8, exposure = "X", outcome = "Y", type = "minimal")
+backdoor_sets(fig_3.8, exposure = "X", outcome = "Y")
 ```
 
     #> { C, Z }
@@ -816,8 +809,8 @@ to estimate the z-specific effect of X on Y.
 ``` r
 adjustedNodes(fig_3.8) <- "Z"
 
-backdoor_sets(fig_3.8, exposure = "X", outcome = "Y", type = "all") %>% 
-  keep(~ length(.) == 4)
+backdoor_sets(fig_3.8, exposure = "X", outcome = "Y", type = "all") |> 
+  keep(\(x) length(x) == 4)
 ```
 
     #> { A, B, C, Z }
@@ -859,7 +852,7 @@ fig_3.18 <-
 plot(fig_3.18)
 ```
 
-![](solutions_dagitty_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
+![](solutions_dagitty_files/figure-commonmark/fig_3.18-1.png)
 
 #### Study question 3.8.1
 
@@ -868,52 +861,52 @@ Given the model depicted above, answer the following questions:
 (a) Identify three testable implications of this model.
 
 ``` r
-impliedConditionalIndependencies(fig_3.18)
+print_implied_conditional_independencies(fig_3.18)
 ```
 
-    #> W_1 _||_ W_2
-    #> W_1 _||_ W_3 | X
-    #> W_1 _||_ Y | W_2, W_3, Z_3
-    #> W_1 _||_ Y | W_3, Z_2, Z_3
-    #> W_1 _||_ Y | W_3, Z_1, Z_3
-    #> W_1 _||_ Y | W_2, X, Z_3
-    #> W_1 _||_ Y | X, Z_2, Z_3
-    #> W_1 _||_ Y | X, Z_1, Z_3
-    #> W_1 _||_ Z_2
-    #> W_1 _||_ Z_3 | Z_1
-    #> W_2 _||_ W_3 | X
-    #> W_2 _||_ W_3 | W_1, Z_3
-    #> W_2 _||_ W_3 | Z_1, Z_3
-    #> W_2 _||_ W_3 | Z_2
-    #> W_2 _||_ X | W_1, Z_3
-    #> W_2 _||_ X | Z_1, Z_3
-    #> W_2 _||_ X | Z_2
-    #> W_2 _||_ Z_1
-    #> W_2 _||_ Z_3 | Z_2
-    #> W_3 _||_ Z_1 | W_1, Z_3
-    #> W_3 _||_ Z_1 | X
-    #> W_3 _||_ Z_2 | Z_1, Z_3
-    #> W_3 _||_ Z_2 | W_1, Z_3
-    #> W_3 _||_ Z_2 | X
-    #> W_3 _||_ Z_3 | X
-    #> X _||_ Y | W_2, W_3, Z_3
-    #> X _||_ Y | W_3, Z_2, Z_3
-    #> X _||_ Y | W_3, Z_1, Z_3
-    #> X _||_ Y | W_1, W_3, Z_3
-    #> X _||_ Z_1 | W_1, Z_3
-    #> X _||_ Z_2 | Z_1, Z_3
-    #> X _||_ Z_2 | W_1, Z_3
-    #> Y _||_ Z_1 | W_1, Z_2, Z_3
-    #> Y _||_ Z_1 | X, Z_2, Z_3
-    #> Y _||_ Z_1 | W_3, Z_2, Z_3
-    #> Y _||_ Z_1 | W_1, W_2, Z_3
-    #> Y _||_ Z_1 | W_2, X, Z_3
-    #> Y _||_ Z_1 | W_2, W_3, Z_3
-    #> Y _||_ Z_2 | W_2, Z_1, Z_3
-    #> Y _||_ Z_2 | W_1, W_2, Z_3
-    #> Y _||_ Z_2 | W_2, X, Z_3
-    #> Y _||_ Z_2 | W_2, W_3, Z_3
-    #> Z_1 _||_ Z_2
+    #> W_1 ⟂ W_2
+    #> W_1 ⟂ W_3 | X
+    #> W_1 ⟂ Y | W_2, W_3, Z_3
+    #> W_1 ⟂ Y | W_3, Z_2, Z_3
+    #> W_1 ⟂ Y | W_3, Z_1, Z_3
+    #> W_1 ⟂ Y | W_2, X, Z_3
+    #> W_1 ⟂ Y | X, Z_2, Z_3
+    #> W_1 ⟂ Y | X, Z_1, Z_3
+    #> W_1 ⟂ Z_2
+    #> W_1 ⟂ Z_3 | Z_1
+    #> W_2 ⟂ W_3 | X
+    #> W_2 ⟂ W_3 | W_1, Z_3
+    #> W_2 ⟂ W_3 | Z_1, Z_3
+    #> W_2 ⟂ W_3 | Z_2
+    #> W_2 ⟂ X | W_1, Z_3
+    #> W_2 ⟂ X | Z_1, Z_3
+    #> W_2 ⟂ X | Z_2
+    #> W_2 ⟂ Z_1
+    #> W_2 ⟂ Z_3 | Z_2
+    #> W_3 ⟂ Z_1 | W_1, Z_3
+    #> W_3 ⟂ Z_1 | X
+    #> W_3 ⟂ Z_2 | Z_1, Z_3
+    #> W_3 ⟂ Z_2 | W_1, Z_3
+    #> W_3 ⟂ Z_2 | X
+    #> W_3 ⟂ Z_3 | X
+    #> X ⟂ Y | W_2, W_3, Z_3
+    #> X ⟂ Y | W_3, Z_2, Z_3
+    #> X ⟂ Y | W_3, Z_1, Z_3
+    #> X ⟂ Y | W_1, W_3, Z_3
+    #> X ⟂ Z_1 | W_1, Z_3
+    #> X ⟂ Z_2 | Z_1, Z_3
+    #> X ⟂ Z_2 | W_1, Z_3
+    #> Y ⟂ Z_1 | W_1, Z_2, Z_3
+    #> Y ⟂ Z_1 | X, Z_2, Z_3
+    #> Y ⟂ Z_1 | W_3, Z_2, Z_3
+    #> Y ⟂ Z_1 | W_1, W_2, Z_3
+    #> Y ⟂ Z_1 | W_2, X, Z_3
+    #> Y ⟂ Z_1 | W_2, W_3, Z_3
+    #> Y ⟂ Z_2 | W_2, Z_1, Z_3
+    #> Y ⟂ Z_2 | W_1, W_2, Z_3
+    #> Y ⟂ Z_2 | W_2, X, Z_3
+    #> Y ⟂ Z_2 | W_2, W_3, Z_3
+    #> Z_1 ⟂ Z_2
 
 The above conditional independencies are all testable implications of
 this model.
@@ -924,10 +917,10 @@ Z_3 are observed.
 ``` r
 latents(fig_3.18) <- setdiff(names(fig_3.18), c("W_3", "X", "Y", "Z_3"))
 
-impliedConditionalIndependencies(fig_3.18)
+print_implied_conditional_independencies(fig_3.18)
 ```
 
-    #> W_3 _||_ Z_3 | X
+    #> W_3 ⟂ Z_3 | X
 
 W_3 and Z_3 are independent conditional on X.
 

@@ -6,11 +6,16 @@ This repository contains solutions to the study questions from the book
 J Pearl, M Glymour, NP Jewell. Causal Inference in Statistics: A Primer.
 Wiley, 2016.
 
-using the [dagitty](https://cran.r-project.org/web/packages/dagitty/) R
-package and the [pgmpy](https://pgmpy.org/) Python package.
+The [book’s website](http://bayes.cs.ucla.edu/PRIMER/) contains PDFs for
+each chapter.
+
+There are two sets of solutions, one using the
+[dagitty](https://cran.r-project.org/web/packages/dagitty/) R package,
+the other using the [pgmpy](https://pgmpy.org/) Python package.
 
 - [dagitty solutions](solutions_dagitty.md)
 - [pgmpy solutions](solutions_pgmpy.ipynb)
 
-The [book’s website](http://bayes.cs.ucla.edu/PRIMER/) contains PDFs for
-each chapter. 
+dagitty was able to solve more of the study questions than pgmpy. Some
+of the pgmpy algorithms are only suitable for small graphs, whereas the
+corresponding dagitty algorithms can handle larger graphs.
