@@ -3,7 +3,7 @@ Causal Inference in Statistics - dagitty and pgmpy Solutions
 
 This repository contains solutions to the study questions from the book
 
-J Pearl, M Glymour, NP Jewell. Causal Inference in Statistics: A Primer.
+Pearl J, Glymour M, Jewell NP. Causal Inference in Statistics: A Primer.
 Wiley, 2016.
 
 The [book’s website](http://bayes.cs.ucla.edu/PRIMER/) contains PDFs for
